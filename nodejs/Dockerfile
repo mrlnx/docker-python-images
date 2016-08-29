@@ -16,7 +16,7 @@ RUN apt-get install -y nodejs npm
 #ENV PATH "$PATH:/usr/bin/npm"
 
 # install dependencies
-ADD config/package.json /tmp/package.json
+ADD . /tmp
 RUN cd /tmp && npm install
 
 # versions
