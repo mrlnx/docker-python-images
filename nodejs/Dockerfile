@@ -12,4 +12,4 @@ RUN apt-get install -y nodejs npm
 EXPOSE 3000
 
 # bash
-CMD ["/bin/bash"]
+CMD ["/bin/bash/node"]
