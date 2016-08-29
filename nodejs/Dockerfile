@@ -10,10 +10,10 @@ RUN apt-get update -qq
 RUN apt-get install -y nodejs npm
 
 # create symbolic link
-#RUN ln -s /usr/bin/nodejs /usr/bin/node
+RUN ln -s /usr/bin/nodejs /usr/bin/node
 
-#ENV PATH "$PATH:/usr/bin/node"
-#ENV PATH "$PATH:/usr/bin/npm"
+ENV PATH "$PATH:/usr/bin/node"
+ENV PATH "$PATH:/usr/bin/npm"
 
 # install dependencies
 ADD . /tmp
