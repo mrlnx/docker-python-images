@@ -14,6 +14,14 @@ RUN ln -s /usr/bin/nodejs /usr/bin/node
 
 ENV PATH "$PATH:/usr/bin/node"
 
+# install from shadow .package.json (notice the dot)
+ADD .package.json /tmp/package.json
+RUN cd /tmp && npm install
+
+# install from actual package.json
+ADD package.json /tmp/package.json
+RUN cd /tmp && npm install
+
 # versions
 RUN node -v
 RUN npm -v
