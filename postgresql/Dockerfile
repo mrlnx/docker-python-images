@@ -22,8 +22,8 @@ EXPOSE 5432
 
 # Switch to user to setup
 USER postgres
-RUN /etc/init.d/postgresql start
-RUN psql --command "CREATE USER pguser WITH SUPERUSER PASSWORD 'pguser';"
+
+RUN /etc/init.d/postgresql start && su postgres -c "psql --command \"ALTER USER pguser WITH password 'pguser';\" "
 RUN createdb -O pguser pgdb
 
 RUN mkdir -p /var/run/postgresql && chown -R postgres /var/run/postgresql
