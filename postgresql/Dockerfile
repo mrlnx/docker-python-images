@@ -9,8 +9,8 @@ RUN echo "deb http://apt.postgresql.org/pub/repos/apt/ precise-pgdg main" > /etc
 RUN apt-get update
 
 # install postgress
-RUN apt-get -y -q install postgresql-9.5 postgresql-client-9.5 postgresql-contrib-9.5 
-RUN apt-get -y -q install libpq-dev pgadmin3
+RUN apt-get install -y -q postgresql-9.5 postgresql-client-9.5 postgresql-contrib-9.5 
+RUN apt-get install -y -q libpq-dev pgadmin3
 
 # switch to user to setup
 USER postgres
