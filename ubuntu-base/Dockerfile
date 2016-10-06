@@ -8,6 +8,7 @@ RUN apt-get update
 RUN apt-get install -y python-dev
 RUN apt-get install -y python-pycurl
 RUN apt-get install -y python-software-properties
+RUN apt-get install -y software-properties-common
 RUN apt-get install -y python-pip
 RUN apt-get install -y build-essential
 RUN apt-get install -y curl
