@@ -2,36 +2,20 @@ FROM mrlnx/ubuntu-base
 
 MAINTAINER "Marlon A.H. Lede" <marlonlede@gmail.com>
 
-RUN apt-key adv --keyserver keyserver.ubuntu.com --recv-keys B97B0AFCAA1A47F044F244A07FCC7D46ACCC4CF8
-RUN echo "deb http://apt.postgresql.org/pub/repos/apt/ precise-pgdg main" > /etc/apt/sources.list.d/pgdg.list
-
-# Update
+ENV PG_VERSION 9.3
+RUN locale-gen en_US.UTF-8
 RUN apt-get update
+RUN apt-get -y install postgresql postgresql-client postgresql-contrib
 
-# Install postgress
-RUN apt-get install -y -q postgresql-9.5 postgresql-client-9.5 postgresql-contrib-9.5 
-RUN /etc/init.d/postgresql stop
+RUN pg_dropcluster $PG_VERSION main && pg_createcluster --locale en_US.UTF-8 $PG_VERSION main
 
-# Add listen address to 
-USER root
-RUN echo "listen_addresses='*'" >> /etc/postgresql/9.5/main/postgresql.conf
-RUN echo "host all  all    0.0.0.0/0  md5" >> /etc/postgresql/9.5/main/pg_hba.conf
+RUN echo "host    all             all             0.0.0.0/0 trust" >> /etc/postgresql/$PG_VERSION/main/pg_hba.conf
+RUN echo "listen_addresses='*'" >> /etc/postgresql/$PG_VERSION/main/postgresql.conf
 
-# Expose to postgres port
+RUN service postgresql start && \
+ su postgres sh -c "createuser -d -r -s docker" && \
+ su postgres sh -c "createdb -O docker docker" && \
+ su postgres sh -c "psql -c \"GRANT ALL PRIVILEGES ON DATABASE docker to docker;\""
+
 EXPOSE 5432
-
-# Switch to user to setup
-USER postgres
-
-RUN /etc/init.d/postgresql start && su postgres -c "psql --command \"ALTER USER pguser WITH password 'pguser';\" "
-RUN createdb -O pguser pgdb
-
-RUN mkdir -p /var/run/postgresql && chown -R postgres /var/run/postgresql
-
-# Add volumes to allow backup config, logs and databases
-VOLUME  ["/etc/postgresql", "/var/log/postgresql", "/var/lib/postgresql"]
-
-USER postgres
-
-# Set the default command to run when starting the container
-CMD ["/usr/lib/postgresql/9.5/bin/postgres", "-D", "/var/lib/postgresql/9.5/main", "-c", "config_file=/etc/postgresql/9.5/main/postgresql.conf"]
+CMD ["su", "postgres", "-c", "/usr/lib/postgresql/$PG_VERSION/bin/postgres -D /var/lib/postgresql/$PG_VERSION/main/ -c config_file=/etc/postgresql/$PG_VERSION/main/postgresql.conf"]
