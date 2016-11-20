@@ -25,8 +25,8 @@ RUN mkdir /etc/ssl/private-copy; \
 ADD postgresql.conf /etc/postgresql/9.5/main/postgresql.conf
 ADD pg_hba.conf /etc/postgresql/9.5/main/pg_hba.conf
 RUN chown postgres:postgres /etc/postgresql/9.5/main/*.conf
-ADD run.sh /usr/local/bin/run.sh
-RUN chmod +x /usr/local/bin/run.sh
+ADD docker-entrypoint.sh /usr/local/bin/docker-entrypoint.sh
+RUN chmod +x /usr/local/bin/docker-entrypoint.sh
 
 # Correct the Error: could not open temporary statistics file "/var/run/postgresql/9.5-main.pg_stat_tmp/global.tmp": No such file or directory
 RUN mkdir -p /var/run/postgresql/9.5-main.pg_stat_tmp
