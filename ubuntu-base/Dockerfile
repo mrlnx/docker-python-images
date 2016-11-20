@@ -18,3 +18,12 @@ RUN apt-get install -y libssl-dev
 RUN apt-get install -y libpq-dev
 RUN apt-get install -y sudo
 RUN apt-get install -y vim
+RUN apt-get install -y wget
+
+# Installs Python 3.5.
+RUN add-apt-repository ppa:fkrull/deadsnakes
+RUN apt-get update
+RUN apt-get install -y \
+    python3.5 \
+    python3.5-dev \
+    python3-pip
