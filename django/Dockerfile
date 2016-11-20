@@ -5,13 +5,16 @@ MAINTAINER "Marlon A.H. Lede" <marlonlede@gmail.com>
 ENV PYTHONUNBUFFERED 1
 
 RUN apt-get update
-RUN apt-get install -y -qq postgresql-client
+
+RUN apt-get update && apt-get install -qq -y \
+    postgresql-client
 
 RUN pip install -U pip
 
 # for now the requirements need to be added in the app
 # the reason for this is that i am be able to
 # change version numbers of the used packages
+
 #RUN mkdir /django
 #WORKDIR /django
 #ADD requirements.txt /django/
