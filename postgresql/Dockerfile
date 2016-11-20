@@ -1,6 +1,7 @@
 FROM mrlnx/ubuntu-base
 
 MAINTAINER "Marlon A.H. Lede" <marlonlede@gmail.com>
+
 RUN locale-gen en_US.UTF-8
 
 RUN add-apt-repository "deb http://apt.postgresql.org/pub/repos/apt/ trusty-pgdg main"
@@ -13,8 +14,6 @@ RUN DEBIAN_FRONTEND=noninteractive apt-get install -y -q \
     postgresql-contrib-9.5 \
     libpq-dev
 
-# /etc/ssl/private can't be accessed from within container for some reason
-# (@andrewgodwin says it's something AUFS related)
 RUN mkdir /etc/ssl/private-copy; \
     mv /etc/ssl/private/* /etc/ssl/private-copy/; \
     rm -r /etc/ssl/private; \
@@ -28,7 +27,6 @@ RUN chown postgres:postgres /etc/postgresql/9.5/main/*.conf
 ADD docker-entrypoint.sh /usr/local/bin/docker-entrypoint.sh
 RUN chmod +x /usr/local/bin/docker-entrypoint.sh
 
-# Correct the Error: could not open temporary statistics file "/var/run/postgresql/9.5-main.pg_stat_tmp/global.tmp": No such file or directory
 RUN mkdir -p /var/run/postgresql/9.5-main.pg_stat_tmp
 RUN chown postgres:postgres /var/run/postgresql/9.5-main.pg_stat_tmp -R
 
