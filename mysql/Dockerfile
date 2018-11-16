@@ -12,12 +12,12 @@ ENV MYSQL_USER=mysql \
     MYSQL_LOG_DIR=/var/log/mysql\
 
 # keep apt up to date
-RUN apt-get update -qq
-    && DEBIAN_FRONTEND=noninteractive apt-get install -y -q-q \
+RUN apt-get update -qq \
+    && DEBIAN_FRONTEND=noninteractive apt-get install -y -q \
     && mysql-server=${MYSQL_VERSION}* \
     && sed -i "s/127.0.0.1/0.0.0.0/g" /etc/mysql/mysql.conf.d/mysqld.cnf \
     && mkdir ${MYSQL_RUN_DIR} \
-    && chown -R ${MYSQL_USER}:${MYSQL_GROUP} ${MYSQL_RUN_DIR}
+    && chown -R ${MYSQL_USER}:${MYSQL_GROUP} ${MYSQL_RUN_DIR} \
     && ln -s /usr/bin/mysql /usr/bin/mysql
 
 ENV PATH "$PATH:/usr/bin/mysql"
