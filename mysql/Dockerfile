@@ -13,22 +13,20 @@ ENV MYSQL_USER=mysql \
 
 # keep apt up to date
 RUN apt-get update -qq
-
-# install nodejs
-RUN DEBIAN_FRONTEND=noninteractive apt-get install -y -q \
-    mysql-server=${MYSQL_VERSION}* \
-    sed -i "s/127.0.0.1/0.0.0.0/g" /etc/mysql/mysql.conf.d/mysqld.cnf \
-    mkdir ${MYSQL_RUN_DIR} \
-    chown -R ${MYSQL_USER}:${MYSQL_GROUP} ${MYSQL_RUN_DIR}
-
-# create symbolic link
-RUN ln -s /usr/bin/mysql /usr/bin/mysql
+    && DEBIAN_FRONTEND=noninteractive apt-get install -y -q-q \
+    && mysql-server=${MYSQL_VERSION}* \
+    && sed -i "s/127.0.0.1/0.0.0.0/g" /etc/mysql/mysql.conf.d/mysqld.cnf \
+    && mkdir ${MYSQL_RUN_DIR} \
+    && chown -R ${MYSQL_USER}:${MYSQL_GROUP} ${MYSQL_RUN_DIR}
+    && ln -s /usr/bin/mysql /usr/bin/mysql
 
 ENV PATH "$PATH:/usr/bin/mysql"
 
 # versions
 RUN mysql -v
 
-VOLUME [${MYSQL_DATA_DIR}]
+VOLUME ["${MYSQL_DATA_DIR}"]
 
 EXPOSE 3306
+
+CMD ["mysqld_safe"]
